@@ -1,11 +1,21 @@
 import React from 'react';
 import './App.scss';
 import calendarData from './Data/calendar'
+import todoData from './Data/data'
+import { Route } from 'react-router-dom'
+import { useState } from 'react'
+
 
 const App = () => {
   return (
     <div className="app">
-      <Calendar calendarData={calendarData} />
+      <Route exact path="/">
+        <Calendar calendarData={calendarData} todoData={todoData}/>
+      </Route>
+
+      <Route path="/popup">
+        POPUP TEST
+      </Route>
     </div>
   );
 }
@@ -14,6 +24,8 @@ const Calendar = (props) => {
   const { title, header, elements, disabled } = props.calendarData
   const weekDaysCount = header.length
   const weekCount = Math.ceil(elements.length / weekDaysCount)
+
+  const [todoData, setTodoData] = useState(props.todoData)
 
   const getDayOfWeekName = (idx) => {
     const dowEnum = {
@@ -28,12 +40,31 @@ const Calendar = (props) => {
     return dowEnum[idx]
   }
 
+  const getMatchDateTodo = (day) => {
+    let filteredTodoData = todoData.filter(e => getDayFromIntDate(e.date) === convertIntDayToStringDay(day))    
+    filteredTodoData = filteredTodoData.map(e => e.todo)
+    if (filteredTodoData) {
+      return filteredTodoData[0]
+    }
+    return []
+  }
+
+  const getDayFromIntDate = (date) => {
+    return date.toString().slice(-2)
+  }
+
+  const convertIntDayToStringDay = (day) => {
+    return day.toString().padStart(2, "0")
+  }
+
   const onClickDayHandler = (day, disabled) => {
     if (disabled) {
       return
     }
-    
+
     console.log(`clicked ${day}`)
+
+    window.open("/popup", "test", "width=500, height=500, top=500, left=1000")
   }
 
   return (
@@ -61,6 +92,7 @@ const Calendar = (props) => {
                       return <CalendarDay 
                         day={e} 
                         dayOfWeek={getDayOfWeekName(idx)}
+                        todo={getMatchDateTodo(e)}
                         disabled={disabled.includes(e)}
                         onClickDayHandler={onClickDayHandler} />
                     })
@@ -77,11 +109,19 @@ const Calendar = (props) => {
 }
 
 const CalendarDay = (props) => {
-  const { day, dayOfWeek, disabled, onClickDayHandler } = props
+  const { day, dayOfWeek, todo, disabled, onClickDayHandler } = props
 
   return (
     <span className={`element ${dayOfWeek} ${disabled ? "disabled" : ""}`} onClick={() => onClickDayHandler(day, disabled)}>
       <p>{day}</p>
+      {
+        todo
+        ? todo.map(e => {
+          console.log(e)
+          return <p className="todo">{e.subject}</p>
+        })
+        : null        
+      }
     </span>
   )
 }
