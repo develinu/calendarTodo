@@ -1,15 +1,17 @@
 import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import './AddTodo.scss'
+import { useSelector, useDispatch } from 'react-redux';
+import { getTargetDateFromDay } from '../utils/date';
 
 
-const AddTodo = (props) => {
+const AddTodo = () => {
 
-  const { getTargetDateFromDay } = props
   const { day, id } = useParams()
   const history = useHistory()
   const date = getTargetDateFromDay(day)
-  const targetTodo = props.todo.find(_todo => _todo.date === date)
+  const { targetTodo } = useSelector(state => state)
+  const dispatch = useDispatch()
 
   let startTime = ''
   let endTime = ''
@@ -36,7 +38,7 @@ const AddTodo = (props) => {
     if (!validFormValues()) {
       return
     }
-
+    
     targetTodo.todo = [
       ...targetTodo.todo, 
       {
@@ -46,12 +48,8 @@ const AddTodo = (props) => {
       }
     ]
 
-    props.setTodo(
-      [
-        ...props.todo.filter(_todo => _todo.date !== date), 
-        targetTodo
-      ]
-    )
+    dispatch({ type: 'add', payload: { date: date, todo: targetTodo } })
+
     history.push(`/todo/${day}`)
   }
 
@@ -68,46 +66,48 @@ const AddTodo = (props) => {
   }
 
   return (
-    <div className="add-todo">
-      <div className="back">
-        <button className="btn-back" onClick={ () => { history.goBack() } }>
-          ＜
-        </button>
+    <div className="add-todo-popup">
+      <div className="add-todo">
+        <div className="back">
+          <button className="btn-back" onClick={ () => { history.goBack() } }>
+            ＜
+          </button>
+        </div>
+        <div className="title">
+          할 일 추가
+        </div>
+        <form onSubmit={addTodo}>
+          <div className="time-picker">
+            <label>시작 시간 : </label>
+            <input 
+              type="time"
+              name="start-time" 
+              className="start-time" 
+              onChange={(e) => { timePickHandler(e, "start") }}/>
+          </div>
+
+          <div className="time-picker">
+            <label>종료 시간 : </label>
+            <input 
+              type="time"
+              name="end-time" 
+              className="end-time" 
+              onChange={(e) => { timePickHandler(e, "end") }}/>
+          </div>
+
+          <div className="todo-textarea">
+            <label className="todo-input-label">할 일 </label>
+            <textarea 
+              name="todo-input"
+              onChange={ (e) => {todoInputHandler(e)} }
+            ></textarea>
+          </div>
+
+          <div className="btn">
+            <input type="submit" value="등록" className="btn-add" />
+          </div>
+        </form>
       </div>
-      <div className="title">
-        할 일 추가
-      </div>
-      <form onSubmit={addTodo}>
-        <div className="time-picker">
-          <label>시작 시간 : </label>
-          <input 
-            type="time"
-            name="start-time" 
-            className="start-time" 
-            onChange={(e) => { timePickHandler(e, "start") }}/>
-        </div>
-
-        <div className="time-picker">
-          <label>종료 시간 : </label>
-          <input 
-            type="time"
-            name="end-time" 
-            className="end-time" 
-            onChange={(e) => { timePickHandler(e, "end") }}/>
-        </div>
-
-        <div className="todo-textarea">
-          <label className="todo-input-label">할 일 </label>
-          <textarea 
-            name="todo-input"
-            onChange={ (e) => {todoInputHandler(e)} }
-          ></textarea>
-        </div>
-
-        <div className="btn">
-          <input type="submit" value="등록" className="btn-add" />
-        </div>
-      </form>
     </div>
   )
 }

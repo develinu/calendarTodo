@@ -1,9 +1,8 @@
 import React from 'react';
 import './App.scss';
-import calendarData from './Data/calendar'
-import todoData from './Data/data'
-import { Route, useHistory, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { Route } from 'react-router-dom'
+import { CSSTransition } from 'react-transition-group'
+import { useSelector } from 'react-redux';
 
 import Calendar from './Components/Calendar'
 import TodoList from './Components/TodoList'
@@ -12,38 +11,27 @@ import AddTodo from './Components/AddTodo'
 
 const App = () => {
 
-  const [todo, setTodo] = useState([...todoData])
-
-  const year = calendarData.title.year
-  const month = calendarData.title.month.toString().padStart(2, "0")
-
-  const getTargetDateFromDay = (day) => {
-    return parseInt(`${year}${month}${day.toString().padStart(2, "0")}`)
+  const { popupTransitionFlag } = useSelector(state => state)
+  
+  const getPopupTransitionFlag = (name) => {
+    let _findPopupFlag = popupTransitionFlag.find(e => e.name === name)
+    return _findPopupFlag.flag
   }
 
   return (
     <div className="app">
-      <Route exact path="/">
-        <Calendar
-          calendarData={calendarData} 
-          todo={todo} 
-          getTargetDateFromDay={getTargetDateFromDay} /> 
+      <Route path="/">
+        <Calendar /> 
       </Route>
 
-      <Route exact path="/todo/:day">
-        <TodoList
-          year={calendarData.title.year}
-          month={month}
-          todo={todo} 
-          setTodo={setTodo}
-          getTargetDateFromDay={getTargetDateFromDay} />
+      <Route path="/todo/:day">
+        <CSSTransition in={getPopupTransitionFlag("TodoList")} classNames="popup" timeout={500}>
+          <TodoList />
+        </CSSTransition>
       </Route>
 
-      <Route exact path="/todo/:day/add/:id">
-        <AddTodo
-          todo={todo}
-          setTodo={setTodo}
-          getTargetDateFromDay={getTargetDateFromDay} />
+      <Route path="/todo/:day/add/:id">
+        <AddTodo />
       </Route>
     </div>
   );

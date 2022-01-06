@@ -1,7 +1,15 @@
 // app
+.popup-enter {
+  opacity: 0;
+}
+
+.popup-enter-active {
+  opacity: 1;
+  transition: all 500ms;
+}
 
 .app {
-  margin: 20px 0px;
+  margin: 0px 0px;
   
   .back {
     .btn-back {

@@ -1,35 +1,18 @@
 import React from "react"
 import CalendarDay from './CalendarDay'
 import './Calendar.scss'
+import { useSelector } from 'react-redux';
+import { getCalendarData, getDayOfWeekName, getTargetDateFromDay } from "../utils/date";
 
 
-const Calendar = (props) => {
-  const { getTargetDateFromDay } = props
-  const { title, header, elements, disabled } = props.calendarData
+const Calendar = () => {
+  const { title, header, elements, disabled } = getCalendarData()
   const weekDaysCount = header.length
   const weekCount = Math.ceil(elements.length / weekDaysCount)
+  const { todos } = useSelector(state => state)
 
-  const getDayOfWeekName = (idx) => {
-    const dowEnum = {
-      0: "sun",
-      1: "mon",
-      2: "tue",
-      3: "wed",
-      4: "thu",
-      5: "fri",
-      6: "sat"
-    }
-    return dowEnum[idx]
-  }
-
-  const getMatchDateTodo = (day) => {
-    let date = getTargetDateFromDay(day)
-    let filteredTodoData = props.todo.filter(_todo => _todo.date === date)
-    filteredTodoData = filteredTodoData.map(e => e.todo)
-    if (filteredTodoData) {
-      return filteredTodoData[0]
-    }
-    return []
+  const getMatchDateTodoData = (day) => {
+    return todos.find(_todo => _todo.date === getTargetDateFromDay(day))
   }
 
   
@@ -58,10 +41,9 @@ const Calendar = (props) => {
                     elements.slice(idx * weekDaysCount, (idx+1) * weekDaysCount).map((e, idx ) => {
                       return <CalendarDay 
                         key={`${idx}-${e}`}
-                        day={e} 
+                        day={e}
+                        todoData={getMatchDateTodoData(e)}
                         dayOfWeek={getDayOfWeekName(idx)}
-                        todo={getMatchDateTodo(e)}
-                        setTargetTodo={props.setTargetTodo}
                         disabled={disabled.includes(e)} />
                     })
                   }

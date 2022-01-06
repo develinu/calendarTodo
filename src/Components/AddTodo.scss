@@ -1,68 +1,86 @@
-.add-todo {    
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 300px;
-  width: 300px;
-  margin: 0 auto;
+.add-todo-popup {
+  position: block;
+  width: 100%;
+  height: 100%;
 
-  .back {
-    width :100%;
-  }
+  .add-todo {    
 
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 10px 0px;
-  }
-
-  .time-picker {
+    position: fixed;
+    width: 50%;
+    min-width: 500px;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 300px;
-    margin-top: 20px;
-  }
+    margin: 0 auto;
+    padding: 30px;
+    border: 1px solid grey;
+    border-radius: 15px;
+    background: white;
 
-  textarea {
-    width: 100%;
-    height: 150px;
-    resize: none;
-  }
+    .back {
+      width :100%;
+    }
 
-  .todo-input-label {
-    display: block;
-    margin-top: 20px;
-  }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 10px 0px;      
+    }
 
-  .btn {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    button {
-      margin-left: 5px;
-      color: white;
-      border: 1px solid grey;
-      border-radius: 10px;
-      padding: 10px 20px;
-      width: 100px;
-    } 
-    input {
-      margin-left: 5px;
-      color: white;
-      border: 1px solid grey;
-      border-radius: 10px;
-      padding: 10px 20px;
-      width: 100px;
-    } 
-    .btn-add {
-      background-color: #43a047;
-      &:active {
-        background-color: #00701a;
+    .time-picker {
+      width: 300px;
+      margin-top: 20px;
+
+      input {
+        border: 1px solid grey;
       }
-    }         
-    .btn-cancel {
-      background-color: #e53935;
-      &:active {
-        background-color: #ab000d;
+    }
+
+    textarea {
+      margin-top: 10px;
+      width: 100%;
+      height: 150px;
+      resize: none;
+      border: 1px solid grey;
+    }
+
+    .todo-input-label {
+      display: block;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      button {
+        margin-left: 5px;
+        color: white;
+        border: 1px solid grey;
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100px;
+      } 
+      input {
+        margin-left: 5px;
+        color: white;
+        border: 1px solid grey;
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100px;
+      } 
+      .btn-add {
+        background-color: #43a047;
+        &:active {
+          background-color: #00701a;
+        }
+      }         
+      .btn-cancel {
+        background-color: #e53935;
+        &:active {
+          background-color: #ab000d;
+        }
       }
     }
   }
