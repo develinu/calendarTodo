@@ -31,7 +31,9 @@ const App = () => {
       </Route>
 
       <Route path="/todo/:day/add/:id">
-        <AddTodo />
+        <CSSTransition in={getPopupTransitionFlag("AddTodo")} classNames="popup" timeout={500}>
+          <AddTodo />
+        </CSSTransition>
       </Route>
     </div>
   );

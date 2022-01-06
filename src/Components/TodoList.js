@@ -18,7 +18,7 @@ const TodoList = () => {
 
   useEffect(() => {
     dispatch({ type: 'on', payload: { name: 'TodoList' } })
-  }, [])
+  }, [day])
     
 
   const onClickAddTodoHandler = () => {    
@@ -26,6 +26,7 @@ const TodoList = () => {
     let nextId = lastId
       ? `${lastId.slice(0, lastId.length - 1)}${convertNextChar(lastId[lastId.length - 1])}`
       : `${date.toString()}a`
+    dispatch({ type: 'off', payload: { name: "AddTodo" } })
     history.push(`/todo/${day}/add/${nextId}`)
   }
 

@@ -71,7 +71,6 @@ const popupTransitionFlag = (state=popupStates, action) => {
     case 'on':
       _findState = _state.find(e => e.name === action.payload.name)
       _findState.flag = true
-      console.log(_state)
       break
 
     case 'off':

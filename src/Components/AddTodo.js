@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import './AddTodo.scss'
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +12,10 @@ const AddTodo = () => {
   const date = getTargetDateFromDay(day)
   const { targetTodo } = useSelector(state => state)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch({ type: 'on', payload: { name: 'AddTodo' } })
+  }, [])
 
   let startTime = ''
   let endTime = ''
