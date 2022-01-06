@@ -11,7 +11,6 @@
 .todo-list-popup {
   position: block;
   width: 100%;
-  height: 100%;
 
   .todo-list {
     position: fixed;
@@ -42,7 +41,10 @@
         border: 1px solid grey;        
         .content {
           padding-left: 20px;
-        }        
+        }
+        .checked {
+          text-decoration: line-through;
+        }
       }      
     }
     .btn {

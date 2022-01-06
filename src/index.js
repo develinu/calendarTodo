@@ -26,6 +26,13 @@ const todos = (state=[...todoData], action) => {
     case 'delete':
       _state = [..._state.filter(e => e.date !== action.payload.date), action.payload.todo]
       break
+
+    case 'check':
+      console.log(_state, action)
+      let _findState = _state.find(e => e.date === action.payload.date)
+      let _findTodo = _findState?.todo?.find(e => e.id === action.payload.id)
+      _findTodo.checked = action.payload.checked
+      break
       
     default:
       break
@@ -37,7 +44,7 @@ const targetTodo = (state={}, action) => {
   switch (action.type) {
     case 'setTodo':
       state = action.payload
-      break
+      break    
       
     default:
       break

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useParams, useHistory } from 'react-router-dom'
 import './TodoList.scss'
 import { getTargetDateFromDay, getCalendarYear, getCalendarMonth, getCalendarDay } from "../utils/date"
@@ -19,13 +19,7 @@ const TodoList = () => {
   useEffect(() => {
     dispatch({ type: 'on', payload: { name: 'TodoList' } })
   }, [])
-  
-  const deleteTodo = (targetId) => {
-    console.log(targetTodo)
-    targetTodo.todo = targetTodo.todo.filter(_todo => _todo.id !== targetId)
-    console.log(targetTodo)
-    dispatch({ type: 'delete', payload: { date: date, todo: targetTodo }})
-  }
+    
 
   const onClickAddTodoHandler = () => {    
     let lastId = targetTodo?.todo[targetTodo.todo.length - 1]?.id
@@ -56,17 +50,7 @@ const TodoList = () => {
         {
           targetTodo.todo
           ? targetTodo.todo.map((e, idx) => {
-            return (
-              <div key={e.id} className="item">
-                <div className="content">
-                  <p>시간 : {e.period[0]} - {e.period[1]}</p>
-                  <p>내용 : {e.subject}</p>
-                </div> 
-                <div className="btn">                
-                  <button className="btn-delete" onClick={() => {deleteTodo(e.id)}} >삭제</button>
-                </div>             
-              </div>
-            )
+            return <Todo key={e.id} item={e} />
           })
           : null
         }
@@ -75,6 +59,39 @@ const TodoList = () => {
           <button className="btn-add" onClick={onClickAddTodoHandler}>추가</button>
         </div>
       </div>
+    </div>
+  )
+}
+
+const Todo = ({ item }) => {
+  const { id, period, subject } = item
+  const { day } = useParams()
+  const date = getTargetDateFromDay(day)
+  const { targetTodo } = useSelector(state => state)
+  const dispatch = useDispatch()
+  const checked = targetTodo?.todo?.find(e => e.id === id)?.checked
+
+  const deleteTodo = () => {
+    targetTodo.todo = targetTodo.todo.filter(_todo => _todo.id !== id)
+    dispatch({ type: 'delete', payload: { date: date, todo: targetTodo }})
+  }
+
+  const checkTodo = (e) => {
+    dispatch({ type: 'check', payload: { date: date, id: id, checked: e.target.checked }})
+  }
+  
+  return (
+    <div key={item.id} className="item">
+      <div className="check">
+        <input type="checkbox" checked={checked} onChange={checkTodo}/>
+      </div>
+      <div className={`content ${checked ? "checked" : ""}`}>
+        <p>시간 : {period[0]} - {period[1]}</p>
+        <p>내용 : {subject}</p>
+      </div> 
+      <div className="btn">                
+        <button className="btn-delete" onClick={() => {deleteTodo(id)}} >삭제</button>
+      </div>             
     </div>
   )
 }
